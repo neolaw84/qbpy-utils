@@ -78,6 +78,28 @@ def start_postgres(version: str = "latest", name: str = None,
     return container
 
 
+def stop_postgres(name: str = None, mount_volume: Dict = {}, verbose:bool = False, 
+    remove:bool = False, remove_data:bool = False
+    ):
+    client = docker.from_env()
+    containers = client.containers.list(all=True, filters={"name": name})
+    if not containers:
+        print ("unable to find the container: {}".format(name))
+        return
+    container = containers[0]
+    if container.status == "running": 
+        if remove_data:
+            container.run_exec("rm -rf /var/lib/postgresql/data", stdout=True, stderr=True, stdin=False, tty=False, privileged=False, user='', detach=False, 
+                stream=False, socket=False, environment=None, workdir=None, demux=False)
+            for k in mount_volume.keys():
+                os.removedirs(k)
+        container.stop(timeout=120)
+        if remove: container.remove(force=True)
+    else:
+        if verbose: print ("container is not running. will do nothing. exiting.")
+        return
+
+
 def get_parser():
     parser = argparse.ArgumentParser(description="Utilities to set up postgres in docker containers.")
     

@@ -13,8 +13,7 @@ class TestPostgres(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         if cls.container:
-            cls.container.exec_run("rm -rf /var/lib/postgresql/data", stdout=True, stderr=True, stdin=False, tty=False, privileged=False, user='', detach=False, 
-                stream=False, socket=False, environment=None, workdir=None, demux=False)
+            postgres.stop_postgres(name=cls.container.name, mount_volume={cls.mypg_dir : True}, verbose=True, remove=True, remove_data=True)
         try:
             os.removedirs(cls.mypg_dir)
         except:
