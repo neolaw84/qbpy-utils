@@ -89,7 +89,7 @@ def stop_postgres(name: str = None, mount_volume: Dict = {}, verbose:bool = Fals
     container = containers[0]
     if container.status == "running": 
         if remove_data:
-            container.run_exec("rm -rf /var/lib/postgresql/data", stdout=True, stderr=True, stdin=False, tty=False, privileged=False, user='', detach=False, 
+            container.exec_run("rm -rf /var/lib/postgresql/data", stdout=True, stderr=True, stdin=False, tty=False, privileged=False, user='', detach=False, 
                 stream=False, socket=False, environment=None, workdir=None, demux=False)
             for k in mount_volume.keys():
                 os.removedirs(k)
