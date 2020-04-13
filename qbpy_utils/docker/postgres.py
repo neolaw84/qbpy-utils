@@ -48,10 +48,10 @@ def start_postgres(version: str = "latest", name: str = None,
             print ("container with name: {} exists.".format(name))
             if restart_if_exists:
                 print ("restarting container: {}".format(name))
-                client.containers.restart(timeout=120) 
+                containers[0].restart(timeout=120) 
             else:
                 print("will do nothing. exiting.")
-            return 
+            return containers[0]
 
     volumes = {}
     if mount_volume: volumes = {k: {"bind": v, "mode": "rw"} for k, v in mount_volume.items()}
