@@ -30,8 +30,8 @@ class TestPostgres(unittest.TestCase):
         assert("postgres:10-alpine" in list(image.tags))
 
     def test_start_via_cli(self):
-        container = postgres.postgres_main("start -vs 10-alpine -n mypg -p 5006 --mount-volume {}:/var/lib/postgresql/data".format(self.mypg_dir).split())
-        self.container = container
+        container = postgres.postgres_main("start -vs 10-alpine -n mypg -p 5006 --mount-volume {}:/var/lib/postgresql/data".format(TestPostgres.mypg_dir).split())
+        TestPostgres.container = container
 
     def test_restart_existing_via_cli(self):
         container = postgres.postgres_main("start --name mypg --restart-if-exists".split())
